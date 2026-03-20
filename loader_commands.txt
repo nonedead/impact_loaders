@@ -1,0 +1,122 @@
+
+
+;  Mountain autoloader compatible command set.
+;       Impliments the following commands:
+;		0 - select drive tower 0 (this is the default until tower 1 is selected)
+;		1 - select drive tower 1
+;		9 - select printer for insert/accept & etc.
+;               A - Accept -> if have a disc put it in the accept else get one from a drive first
+; 		B - disaBle accept2 hopper (single pin hopper on LS2)
+;               C - Calibrate loader & dont mess with printer
+;		D - Diagnostics - see below
+;		E - Extended diags - see below
+;		F - Enter Flash CPU mode
+;		f - dump flash settings - first Ascii hex byte is the number of ascii hex bytes comming
+;		G - Get -> get a disc from a drive and hold it
+;		H - move pick arm to home (drives)
+;               I - insert -> if have a disc put it in a drive else get one first
+;		J - enable accept2 hopper (single pin hopper on LS2)
+;		K - parK picker over drive body
+;		k - reset hopper positions to factory defaults
+;		L - Load -> get a disc from input hopper and hold it
+;		M - Insert Printer
+;		m - Advance hopper for cyclic hopper
+;		N - Accept Printer
+;		n - Get current hopper position
+;		O - Reject Printer
+;		o - Open printer
+;		P - Printer status - returns 1 byte of ascii hex
+;			bit 0 - tray busy
+;			bit 1 - tray out
+;			bit 2 - tray in
+;			bit 3 - have disc
+;			
+;		p - Close printer
+;		Q - Check for printer and close it if it is there
+;		q - Close printer w/o waiting for command to complete
+;               R - Reject 
+;               S - Status - return 2 ascii hex buyes
+;			First Byte -
+;				0h = no error
+;				4h = command sequence error
+;				2h = input hopper empty
+;				1h = jammed
+;				8h = calibration failure
+;				fh = unknown error
+;			Second Byte - printer status
+;				bit 0 - found printer
+;				bit 1 - tray out
+;				bit 2 - tray in
+;				bit 3 - have disc
+;
+;		s - Mec Sensor status Show sensors (return 2 byte ASCII hex)
+;			Fisrt Byte:
+;				Bit 7 - TT2_Station
+;				Bit 6 - TT2_Home
+;				Bit 5 - TT_Station
+;				Bit 4 - TT_Home
+;			Second Byte:
+;				Bit 3 - Rot_Home
+;				Bit 2 - Top
+;				Bit 1 - Disc
+;				Bit 0 - Tray
+;
+;		T - sTicky disc mode - (agressive pick)
+;		t - AUtOCYCLE mode
+;		U - Un sticky disc mode
+;		u - uN-AUTOCYCLE mode
+;		V - return firmware Version
+;		v - return first call to this command status 
+;			returns '1' on first call - '0' for all subsequent calls
+;		W - Set mini disc mode
+;		w - Unset mini disc mode 
+;		X - unused
+; 		Y - reset cYclic hoppers
+;		Z - unused
+;
+;		D - Terminal based diagnostics
+;			-- many commands (see diag menu)
+;		E - Diag commands (programic interface)
+;			S - Show sensors (return 2 byte ASCII hex)
+;				Bit 7 - TT2_Station
+;				Bit 6 - TT2_Home
+;				Bit 5 - TT_Station
+;				Bit 4 - TT_Home
+;				Bit 3 - Rot_Home
+;				Bit 2 - Top
+;				Bit 1 - Disc
+;				Bit 0 - Tray
+;				
+;			{
+;			A - Set accept position
+;			B - Set accept2 position
+;			I - Set input position
+;			Q - Set left (drives2) position
+;			R - Set right (drives) position
+;			N - Set printer position
+;			C - Set carosel position
+;			H - Set hopper height
+;			O - Set output2 height
+;			D - Set right carousel position (TT2)		
+;			}
+;			    --- these commands work in the above modes
+;				C - CCW step
+;				W - CW step
+;				U - Short up move
+;				D - Short down move
+;				S - Save current & exit - responds with an X when saved
+;				A - abort w/o change
+;
+;			P - Cycle Pick Solenoid
+;			U - UP/Down Test (must be at drive w/o open drive tray)
+;			T - Toggle stepper power
+;			E - Set penetration - responds with current penetration
+;					      loader will expect a penetration number
+;					      and will respoind with an X when saved
+;			
+;
+;
+;	most of the first level commands respond with:
+;		Ascii X - command successful
+;		Ascii E - Command failed
+;		Ascii ? - unknown command 
